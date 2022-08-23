@@ -1,4 +1,4 @@
-package com.tests.integration.Tests.model;
+package com.tests.integration.Tests.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

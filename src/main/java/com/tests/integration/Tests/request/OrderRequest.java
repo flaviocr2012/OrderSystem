@@ -1,4 +1,4 @@
-package com.tests.integration.Tests.model;
+package com.tests.integration.Tests.request;
 
 import com.sun.istack.NotNull;
 import lombok.Data;
