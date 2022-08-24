@@ -4,13 +4,17 @@ import com.tests.integration.Tests.component.ExchangeRateClient;
 import com.tests.integration.Tests.entity.Order;
 import com.tests.integration.Tests.entity.Payment;
 import com.tests.integration.Tests.exception.OrderAlreadyPaid;
+import com.tests.integration.Tests.model.Receipt;
 import com.tests.integration.Tests.repository.OrderRepository;
 import com.tests.integration.Tests.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.persistence.EntityNotFoundException;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -22,12 +26,12 @@ public class OrderService {
     private final ExchangeRateClient exchangeRateClient;
 
     public Order createOrder(MonetaryAmount amount) {
-
-        return null;
+        Order order = new Order(LocalDateTime.now(), amount.getNumber().numberValue(BigDecimal.class), false);
+        return orderRepository.save(order);
     }
 
     public Order getOrder(Long orderId) {
-        return null;
+        return orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
     }
 
     public Payment pay(Long orderId, String creditCardNumber) {
@@ -39,6 +43,11 @@ public class OrderService {
 
         orderRepository.save(order.markPaid());
         return  paymentRepository.save(new Payment(order, creditCardNumber));
+    }
 
+
+    public Receipt getReceipt(Long orderId, CurrencyUnit currency) {
+
+        return null;
     }
 }
