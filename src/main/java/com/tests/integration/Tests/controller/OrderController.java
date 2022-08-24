@@ -35,18 +35,16 @@ public class OrderController {
         Order order = orderService.getOrder(orderId);
         return ResponseEntity.ok().body(order);
     }
-
-    public ResponseEntity<Order> pay(
+    @PostMapping("/order/{id}/payment")
+    public ResponseEntity<PaymentResponse> pay(
             @PathVariable("id") Long orderId,
             @RequestBody @Valid PaymentRequest paymentRequest,
             UriComponentsBuilder uriComponentsBuilder) {
 
         Payment payment = orderService.pay(orderId, paymentRequest.getCreditCardNumber());
         URI location = uriComponentsBuilder.path("/order/{id}/receipt").buildAndExpand(orderId).toUri();
-        PaymentResponse response = new PaymentResponse(payment.getId(), payment.getCreditCardNumber());
-        return ResponseEntity.created(location).body(response)
+        PaymentResponse response = new PaymentResponse(payment.getOrder().getId(), payment.getCreditCardNumber());
+        return ResponseEntity.created(location).body(response);
     }
-    )
-
 
 }

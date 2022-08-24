@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Data
@@ -21,9 +20,9 @@ public class Payment {
     private Long id;
 
     @OneToOne
-    @NotNull
+    @NonNull
     private Order order;
 
-    @NotNull
+    @NonNull
     private String creditCardNumber;
 }
