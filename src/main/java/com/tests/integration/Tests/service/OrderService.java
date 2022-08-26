@@ -8,9 +8,11 @@ import com.tests.integration.Tests.model.Receipt;
 import com.tests.integration.Tests.repository.OrderRepository;
 import com.tests.integration.Tests.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
+import org.javamoney.moneta.Money;
 import org.springframework.stereotype.Service;
 
 import javax.money.CurrencyUnit;
+import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
@@ -37,17 +39,22 @@ public class OrderService {
     public Payment pay(Long orderId, String creditCardNumber) {
         Order order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
 
-        if(order.isPaid()) {
+        if (order.isPaid()) {
             throw new OrderAlreadyPaid();
         }
 
         orderRepository.save(order.markPaid());
-        return  paymentRepository.save(new Payment(order, creditCardNumber));
+        return paymentRepository.save(new Payment(order, creditCardNumber));
     }
 
 
     public Receipt getReceipt(Long orderId, CurrencyUnit currency) {
+        Payment payment = paymentRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
+        BigDecimal rate = exchangeRateClient.getExchangeRate(Monetary.getCurrency("EUR"), currency);
 
-        return null;
+        BigDecimal amount = payment.getOrder().getAmount();
+        MonetaryAmount convertedAmount = Money.of(amount.multiply(rate), currency);
+
+        return new Receipt(payment.getOrder().getDate(), payment.getCreditCardNumber(), convertedAmount);
     }
 }
