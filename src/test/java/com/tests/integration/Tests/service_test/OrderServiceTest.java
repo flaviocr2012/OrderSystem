@@ -1,5 +1,7 @@
-package com.tests.integration.Tests.entity;
+package com.tests.integration.Tests.service_test;
 
+import com.tests.integration.Tests.entity.Order;
+import com.tests.integration.Tests.entity.Payment;
 import com.tests.integration.Tests.exception.PaymentException;
 import com.tests.integration.Tests.repository.OrderRepository;
 import com.tests.integration.Tests.repository.PaymentRepository;
@@ -19,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class OrderTest {
+class OrderServiceTest {
 
     @Mock
     private OrderRepository orderRepository;
