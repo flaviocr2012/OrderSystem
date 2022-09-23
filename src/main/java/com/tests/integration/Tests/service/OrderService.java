@@ -4,6 +4,7 @@ import com.tests.integration.Tests.component.ExchangeRateClient;
 import com.tests.integration.Tests.entity.Order;
 import com.tests.integration.Tests.entity.Payment;
 import com.tests.integration.Tests.exception.OrderAlreadyPaid;
+import com.tests.integration.Tests.exception.PaymentException;
 import com.tests.integration.Tests.model.Receipt;
 import com.tests.integration.Tests.repository.OrderRepository;
 import com.tests.integration.Tests.repository.PaymentRepository;
@@ -40,7 +41,7 @@ public class OrderService {
         Order order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
 
         if (order.isPaid()) {
-            throw new OrderAlreadyPaid();
+            throw new PaymentException();
         }
 
         orderRepository.save(order.markPaid());

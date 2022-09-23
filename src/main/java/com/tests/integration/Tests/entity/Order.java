@@ -27,6 +27,11 @@ public class Order {
     @NonNull
     private Boolean paid;
 
+    public Order(Long id, @NonNull Boolean paid) {
+        this.id = id;
+        this.paid = paid;
+    }
+
     public boolean isPaid () {
         return paid;
     }
